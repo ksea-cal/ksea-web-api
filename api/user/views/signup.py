@@ -16,4 +16,4 @@ class SignupView(BaseAPIMixin, APIView):
             serializer.save()
             return self.ok_single_response(result=serializer.data, status=status.HTTP_201_CREATED)
         else:
-            return self.err_response(message="Invalid login data", status=status.HTTP_400_BAD_REQUEST)
+            return self.err_response(detail="Invalid login data", status=status.HTTP_400_BAD_REQUEST)

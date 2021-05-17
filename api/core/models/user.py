@@ -28,6 +28,11 @@ class UserManager(BaseUserManager):
         extra_fields.setdefault('status', User.Status.ACTIVE)
         return self._create_user(berkeley_email, password, **extra_fields)
 
+    def current_members(self):
+        return self.filter(status=User.Status.ACTIVE)
+
+    def waiting_members(self):
+        return self.filter(status=User.Status.WAITING)
 
 class User(AbstractUser):
     """Base user model for KSEA"""

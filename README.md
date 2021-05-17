@@ -112,3 +112,4 @@ python manage.py runserver
 - never change the data in the migrations folder.
 - never run makemigrations or migrate unless confirmed.
 
+https://www.youtube.com/watch?v=BLH3s5eTL4Y

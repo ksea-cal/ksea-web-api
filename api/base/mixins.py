@@ -19,9 +19,7 @@ class BaseAPIMixin:
             'message': message
         }, status=status)
 
-    def err_response(self, message='', err_code=None, status=status.HTTP_400_BAD_REQUEST):
+    def err_response(self, detail='', status=status.HTTP_400_BAD_REQUEST):
         return Response({
-            'success': False,
-            'err_code': err_code,
-            'message': message
+            'detail': detail
         }, status=status)
