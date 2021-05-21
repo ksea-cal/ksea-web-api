@@ -34,11 +34,16 @@ class UserManager(BaseUserManager):
     def waiting_members(self):
         return self.filter(status=User.Status.WAITING)
 
+    def alumni_members(self):
+        return self.filter(status=User.Status.ALUMNI)
+
+
 class User(AbstractUser):
     """Base user model for KSEA"""
 
     class Status(models.TextChoices):
         ACTIVE = 'ACT', 'Active'
+        ALUMNI = 'ALU', 'Alumni'
         WAITING = 'WAI', 'Waiting'
         SUSPENDED = 'SUS', 'Suspended'
         BANNED = 'BAN', 'Banned'
@@ -56,3 +61,22 @@ class User(AbstractUser):
 
     def check_berkeley_email_valid(email):
         return email.endswith('berkeley.edu')
+
+    @property
+    def current_profile(self):
+        """Return the most recent profile of the user"""
+        from .userprofile import UserProfile
+        return UserProfile.objects.current_profile_for_user(self)
+
+    def create_new_profile(self, semester, role):
+        """create a new profile for the given semester if the user is valid and no profile exists for the semester"""
+        if self.status != self.Status.ACTIVE:
+            return None
+        from .userprofile import UserProfile
+        if UserProfile.objects.filter(user=self, semester=semester):
+            return None
+        return UserProfile.objects.create(user=self, semester=semester, role=role)
+
+    def is_currently_board_member(self):
+        from .userprofile import UserProfile
+        return self.current_profile and self.current_profile.role == UserProfile.Role.BOARD_MEMBER

@@ -5,7 +5,9 @@ from .semester import Semester
 
 
 class UserProfileManager(models.Manager):
-    pass
+    def current_profile_for_user(self, user):
+        return self.filter(user=user).order_by('-semester__pk').first()
+
 
 class UserProfile(models.Model):
     """Each user's semester profile model"""

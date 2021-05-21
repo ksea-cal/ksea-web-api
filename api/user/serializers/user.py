@@ -1,8 +1,8 @@
 from rest_framework import serializers
 from django.contrib.auth import authenticate
-from django.contrib.auth.models import update_last_login
 
-from api.core.models.user import User
+from api.core.models import User
+from .userprofile import UserProfileSerializer
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -21,6 +21,17 @@ class UserSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         user = User.objects.create_user(**validated_data)
         return user
+
+
+class UserDetailSerializer(serializers.ModelSerializer):
+
+    user_profile = UserProfileSerializer(source='current_profile')
+
+    class Meta:
+        model = User
+        fields = '__all__'
+        write_only_fields = ('password',)
+        read_only_fields = ('id',)
 
 
 class UserLoginSerializer(serializers.Serializer):

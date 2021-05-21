@@ -3,6 +3,7 @@ from rest_framework.authtoken.models import Token
 from rest_framework.authtoken.views import ObtainAuthToken
 
 from api.base.mixins import BaseAPIMixin
+from api.core.models import User
 from ..serializers import UserLoginSerializer
 
 
@@ -17,5 +18,7 @@ class LoginView(BaseAPIMixin, ObtainAuthToken):
         if not serializer.is_valid():
             return self.err_response('Could not log in to the server', status=status.HTTP_400_BAD_REQUEST)
         user = serializer.validated_data
+        if not user.status in [User.Status.ACTIVE, User.Status.ALUMNI]:
+            return self.err_response('User is not currently active', status=status.HTTP_403_FORBIDDEN)
         token, _ = Token.objects.get_or_create(user=user)
-        return self.ok_single_response(result=token.key, status=status.HTTP_200_OK)
+        return self.ok_single_response(result={"token": token.key}, status=status.HTTP_200_OK)

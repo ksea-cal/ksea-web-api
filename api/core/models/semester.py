@@ -8,11 +8,11 @@ class Semester(models.Model):
     """Semester model for each semester"""
 
     class Terms(models.TextChoices):
-        SPRING = 'spr', 'spring'
-        FALL = 'fal', 'fall'
+        SPRING = 'spring', 'spring'
+        FALL = 'fall', 'fall'
 
     year = models.IntegerField()
-    term = models.CharField(max_length=3, choices=Terms.choices)
+    term = models.CharField(max_length=10, choices=Terms.choices)
 
     objects = SemesterManager()
 
