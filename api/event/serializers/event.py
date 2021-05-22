@@ -17,7 +17,7 @@ class EventSerializer(serializers.ModelSerializer):
         return self.context['request'].user
 
     def validate(self, data):
-        if not self.context['request'].user and self.context['request'].user.is_currently_board_member():
+        if not self.context['request'].user and self.context['request'].user.is_currently_board_member:
             raise serializers.ValidationError("you are currently not a board member")
         data['owner'] = self.context['request'].user.current_profile
         return data

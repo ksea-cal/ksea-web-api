@@ -77,6 +77,7 @@ class User(AbstractUser):
             return None
         return UserProfile.objects.create(user=self, semester=semester, role=role)
 
+    @property
     def is_currently_board_member(self):
         from .userprofile import UserProfile
         return self.current_profile and self.current_profile.role == UserProfile.Role.BOARD_MEMBER
