@@ -5,11 +5,11 @@
 
 1. clone the project with the command
 ```
-git clone https://github.com/seongminchoob/KSEA_web_api.git
+git clone https://github.com/ksea-cal/ksea-web-api.git
 ```
 2. cd into the KSEA_web_api folder
 ```
-cd KSEA_web_api
+cd ksea-web-api
 ```
 3. check you have virtualenv in your computer
 ```
@@ -52,7 +52,7 @@ brew services start postgresql
 ```
 3. start postgres with root privileges
 ```
-sudo -u postgres psql
+psql postgres
 ```
 4. create new user kseaapiuser with password "welikeksea", and give createDB access.
 ```
@@ -76,7 +76,6 @@ python manage.py runserver --settings=config.settings.local
 ```
 python manage.py migrate --settings=config.settings.local
 ```
-9. you're all done with SETUPS!!!!
 
 
 REFERENCES:
@@ -99,6 +98,30 @@ source ./venv/bin/activate
 python manage.py runserver
 ```
 
+## GIT
+1. create a new git branch (start from master branch)
+```
+git checkout -b [BRANCH NAME]
+```
+
+2. time to time, rebase from master
+```
+git checkout master
+git pull
+git checkout [BRANCH NAME]
+git rebase master
+```
+
+3. push to remote branch
+```
+git add .
+git commit -am [YOUR COMMIT MESSAGE]
+git push origin [BRANCH NAME]
+```
+
+4. go to the github repo and create a PR request
+
+
 ## FORMATTING
 
 1. Commit messages
@@ -111,5 +134,3 @@ python manage.py runserver
 
 - never change the data in the migrations folder.
 - never run makemigrations or migrate unless confirmed.
-
-https://www.youtube.com/watch?v=BLH3s5eTL4Y
