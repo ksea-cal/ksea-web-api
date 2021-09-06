@@ -107,7 +107,7 @@ git checkout -b [BRANCH NAME]
 2. time to time, rebase from master
 ```
 git checkout master
-git pull
+git pull 
 git checkout [BRANCH NAME]
 git rebase master
 ```
