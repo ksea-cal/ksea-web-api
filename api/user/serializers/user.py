@@ -2,6 +2,7 @@ from rest_framework import serializers
 from django.contrib.auth import authenticate
 
 from api.core.models import User
+from api.major.serializers import MajorSerializer
 from .userprofile import UserProfileSerializer
 
 
@@ -9,7 +10,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = '__all__'
+        fields = ('berkeley_email', 'password')
         write_only_fields = ('password',)
         read_only_fields = ('id',)
 
@@ -26,11 +27,12 @@ class UserSerializer(serializers.ModelSerializer):
 class UserDetailSerializer(serializers.ModelSerializer):
 
     user_profile = UserProfileSerializer(source='current_profile')
+    majors = MajorSerializer(many=True)
+    minors = MajorSerializer(many=True)
 
     class Meta:
         model = User
-        fields = '__all__'
-        write_only_fields = ('password',)
+        exclude = ('password',)
         read_only_fields = ('id',)
 
 
@@ -47,4 +49,22 @@ class UserLoginSerializer(serializers.Serializer):
         if not user:
             raise serializers.ValidationError("Invalid auth credentials")
         data['user'] = user
+        return user
+
+
+class UserSignUpSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = User
+        fields = ('berkeley_email', 'password', 'first_name', 'last_name', 'full_name', 'country', 'gender', 'birth', 'majors', 'minors')
+        write_only_fields = ('password',)
+        read_only_fields = ('id',)
+
+    def validate_berkeley_email(self, value):
+        if not User.check_berkeley_email_valid(value):
+            raise serializers.ValidationError("Berkeley email is invalid")
+        return value
+
+    def create(self, validated_data):
+        user = User.objects.create_user(**validated_data)
         return user

@@ -5,14 +5,17 @@ from django.db import models
 class UserManager(BaseUserManager):
     """Model manager for custom user model"""
 
-    def _create_user(self, berkeley_email, password, **extra_fields):
+    def _create_user(self, berkeley_email, password, majors, minors, **extra_fields):
         """Create and save User with the given email and password"""
         if not berkeley_email or not User.check_berkeley_email_valid(berkeley_email):
             raise ValueError("The given email is invalid")
         berkeley_email = self.normalize_email(berkeley_email)
         user = self.model(berkeley_email=berkeley_email, **extra_fields)
         user.set_password(password)
+
         user.save(using=self._db)
+        user.majors.set(majors)
+        user.minors.set(minors)
         return user
 
     def create_user(self, berkeley_email, password, **extra_fields):
@@ -45,12 +48,24 @@ class User(AbstractUser):
         ACTIVE = 'ACT', 'Active'
         ALUMNI = 'ALU', 'Alumni'
         WAITING = 'WAI', 'Waiting'
+        REJECTED = 'REJ', 'Rejected'
         SUSPENDED = 'SUS', 'Suspended'
         BANNED = 'BAN', 'Banned'
+
+    class Gender(models.TextChoices):
+        MALE = 'MAL', 'Male'
+        FEMALE = 'FEM', 'Female'
 
     username = None
     berkeley_email = models.EmailField(unique=True)
     status = models.CharField(max_length = 3, choices=Status.choices, default=Status.WAITING)
+    full_name = models.CharField(max_length=200, blank=False)
+    majors = models.ManyToManyField('Major', related_name="user_major")
+    minors = models.ManyToManyField('Major', related_name="user_minor")
+    birth = models.DateField(auto_now_add=False)
+    gender = models.CharField(max_length=3, choices=Gender.choices, blank=False)
+    country = models.CharField(max_length=30, blank=False)
+
 
     USERNAME_FIELD = 'berkeley_email'
     REQUIRED_FIELDS = []

@@ -20,5 +20,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('events/', include('api.event.urls')),
     path('semesters/', include('api.semester.urls')),
+    path('majors/', include('api.major.urls')),
     path('users/', include('api.user.urls'))
 ]

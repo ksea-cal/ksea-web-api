@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'api.event',
     'api.focusgroup',
     'api.semester',
+    'api.major',
     'api.user',
 ]
 
@@ -64,6 +65,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 ]
 
 ROOT_URLCONF = 'config.urls'
@@ -86,6 +88,10 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'config.wsgi.application'
 
+CORS_ALLOWED_ORIGINS = [
+    "http://127.0.0.1:3000",
+    "http://localhost:3000/"
+]
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
