@@ -1,5 +1,6 @@
 from rest_framework import status, viewsets
 from rest_framework.views import APIView
+from rest_framework.authentication import TokenAuthentication
 
 from api.base.permissions import IsAuthenticated
 from api.base.mixins import BaseAPIMixin, BaseListModelMixin, BaseRetrieveModelMixin
@@ -36,5 +37,6 @@ class AlumniViewSet(BaseAPIMixin, BaseListModelMixin, BaseRetrieveModelMixin, vi
 
 class UserDetailViewSet(BaseAPIMixin, BaseListModelMixin, BaseRetrieveModelMixin, viewsets.GenericViewSet):
     """Retrieve/List current users with userprofile"""
-    queryset = User.objects.current_members()
+    queryset = User.objects.all()
     serializer_class = UserDetailSerializer
+    permission_classes = [IsAuthenticated]
