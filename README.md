@@ -98,6 +98,11 @@ source ./venv/bin/activate
 python manage.py runserver
 ```
 
+### POPULATE MODELS
+```
+python manage.py model_loader
+```
+
 ## GIT
 1. create a new git branch (start from master branch)
 ```
