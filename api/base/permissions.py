@@ -25,6 +25,5 @@ class BoardCreateOrAllowAny(BasePermission):
     """Only board members can create but any user can access"""
     def has_permission(self, request, view):
         if view.action == 'create':
-            print(request.user.current_profile)
             return request.user and request.user.current_profile and request.user.current_profile.role == UserProfile.Role.BOARD_MEMBER
         return True

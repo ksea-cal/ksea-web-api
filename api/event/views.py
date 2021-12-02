@@ -8,7 +8,7 @@ from api.base.permissions import BoardCreateOrAllowAny, IsAuthenticated
 from api.user.serializers import UserProfileSerializer
 
 from .models import Event
-from .serializers import EventSerializer
+from .serializers import EventSerializer, EventDetailSerializer
 
 
 class EventViewSet(BaseAPIMixin, BaseListModelMixin, BaseRetrieveModelMixin, BaseCreateModelMixin, viewsets.GenericViewSet):
@@ -16,6 +16,11 @@ class EventViewSet(BaseAPIMixin, BaseListModelMixin, BaseRetrieveModelMixin, Bas
     queryset = Event.objects.all()
     serializer_class = EventSerializer
     permission_classes = [BoardCreateOrAllowAny,]
+
+    def get_serializer_class(self):
+        if self.action == 'create':
+            return EventSerializer
+        return EventDetailSerializer
 
 
 class ParticipateEventView(BaseAPIMixin, APIView):

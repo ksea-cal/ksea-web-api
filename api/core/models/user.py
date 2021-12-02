@@ -1,7 +1,6 @@
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.db import models
 
-
 class UserManager(BaseUserManager):
     """Model manager for custom user model"""
 
@@ -83,13 +82,21 @@ class User(AbstractUser):
         from .userprofile import UserProfile
         return UserProfile.objects.current_profile_for_user(self)
 
+    def has_most_recent_profile(self):
+        from .semester import Semester
+        from .userprofile import UserProfile
+        return UserProfile.objects.filter(user=self, semester=Semester.objects.current_semester())
+
     def create_new_profile(self, semester, role):
         """create a new profile for the given semester if the user is valid and no profile exists for the semester"""
         if self.status != self.Status.ACTIVE:
             return None
+        print(role)
+
+        user_profile = self.has_most_recent_profile()
+        if user_profile:
+            return user_profile
         from .userprofile import UserProfile
-        if UserProfile.objects.filter(user=self, semester=semester):
-            return None
         return UserProfile.objects.create(user=self, semester=semester, role=role)
 
     @property

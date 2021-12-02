@@ -2,7 +2,8 @@ from django.db import models
 
 
 class SemesterManager(models.Manager):
-    pass
+    def current_semester(self):
+        return self.all().order_by('-pk').first()
 
 class Semester(models.Model):
     """Semester model for each semester"""

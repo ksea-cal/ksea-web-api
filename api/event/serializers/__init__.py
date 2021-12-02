@@ -1,1 +1,1 @@
-from .event import EventSerializer
+from .event import EventSerializer, EventDetailSerializer
